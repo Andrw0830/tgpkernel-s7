@@ -121,6 +121,31 @@ config CPU_FREQ_DEFAULT_GOV_ZZMOOVE
 	  frequency lookup tables and optimized scaling triggers instead of
 	  % frequency steps to get smooth up/downscaling dependant on CPU load.
 
+config CPU_FREQ_DEFAULT_GOV_SMARTASS2
+	bool "smartassV2"
+	select CPU_FREQ_GOV_SMARTASS2
+	help
+	  Use the CPUFreq governor 'smartass2' as default.
+
+config CPU_FREQ_DEFAULT_GOV_IMPULSE
+	bool "impulse"
+	select CPU_FREQ_GOV_IMPULSE
+	help
+	  Use the CPUFreq governor 'impulse' as default. This allows
+	  you to get a full dynamic cpu frequency capable system by simply
+	  loading your cpufreq low-level hardware driver, using the
+	  'impulse' governor for latency-sensitive workloads.
+
+config CPU_FREQ_DEFAULT_GOV_RELAXED
+	bool "relaxed"
+	select CPU_FREQ_GOV_RELAXED
+	help
+		Use the CPUFreq governor 'relaxed' as default. This allows
+		you to get a full dynamic frequency capable system by simply
+		loading your cpufreq low-level hardware driver.
+		Be aware that not all cpufreq drivers support the conservative
+		governor. If unsure have a look at the help section of the
+		driver. Fallback governor will be the interactive governor.
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -227,6 +252,23 @@ config CPU_FREQ_GOV_ZZMOOVE
 	  frequency lookup tables and optimized scaling triggers instead of
 	  % frequency steps to get smooth up/downscaling dependant on CPU load.
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_RELAXED
+	tristate "'relaxed' cpufreq governor"
+	depends on CPU_FREQ
+	select CPU_FREQ_GOV_COMMON
+	default y
+	help
+		'relaxed' - similar to 'conservative', but optimized for devices
+		that go into suspended or display off states often.
+
+comment "CPU frequency scaling drivers"
+
+config CPU_FREQ_GOV_SMARTASS2
+	tristate "'smartassV2' cpufreq governor"
+	depends on CPU_FREQ
+	help
+	  'smartassV2' - a "smart" governor
 
 config CPUFREQ_DT
 	tristate "Generic DT based cpufreq driver"
